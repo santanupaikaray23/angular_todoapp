@@ -1,0 +1,14 @@
+.form-row {
+    display: flex;
+    align-items: center; /* Aligns items vertically center */
+    gap: 10px; /* Adds space between children */
+  }
+  .name-and-action {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.name-and-action span {
+  margin-right: 10px; /* Adjusts space between the name and the button */
+}
