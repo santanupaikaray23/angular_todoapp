@@ -1,27 +1,40 @@
 <div class="container">
-    <div class="form-row"> <!-- Wrapper to keep elements in line -->
-        <input type="text" placeholder="Add something to do..." class="form-control" [(ngModel)]="name">
-        <button class="btn btn-success" (click)="createItem()">Save</button>
-        
-    </div>
+    <form #todoForm="ngForm" (ngSubmit)="createItem()">
+        <div class="form-row">
+            <input type="text" 
+                   placeholder="Add something to do..." 
+                   class="form-control" 
+                   [(ngModel)]="name" 
+                   name="todoName" 
+                   required
+                   #todoName="ngModel">
+            <button class="btn btn-success" type="submit" [disabled]="!todoForm.valid">Save</button>
+        </div>
+        <!-- Display validation error -->
+        <div *ngIf="todoName.invalid && todoName.touched" class="alert alert-danger">
+            <div *ngIf="todoName.errors?.['required']">
+                This field is required.
+            </div>
+            <!-- Add other error messages here as needed -->
+        </div>
+    </form>
     <br><br>
     <table class="table">
         <thead>
             <tr>
-               
-              
+                <!-- Table headers -->
             </tr>
         </thead>
         <tbody>
             <tr *ngFor="let item of items">
-              <td class="name-and-action">
-                <span>{{item.id}}</span>
-              {{item.name}} <button class="btn btn-danger btn-sm" (click)="deleteItem()">Delete</button>
-            </td>
-             
-              
-            </tr> 
+                <td>
+                    <input type="checkbox" [(ngModel)]="item.selected">
+                </td>
+                <td class="name-and-action">
+                    {{item.name}}<button class="btn btn-danger btn-sm" (click)="deleteItem(item.id)">Delete</button>
+                </td>
+            </tr>
         </tbody>
     </table>
     <br><br>
- </div>
+</div>

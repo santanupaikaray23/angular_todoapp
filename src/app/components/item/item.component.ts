@@ -9,14 +9,15 @@ import { Item } from '../../models/item.model';
   styleUrl: './item.component.css'
 })
 export class ItemComponent {
-getItem() {
-throw new Error('Method not implemented.');
-}
+onSubmit: any;
+
+
 
   items:any;
   item: Item | undefined;
   id: number | undefined;
   name: string | undefined;
+  todoForm: any;
   
 
   constructor(private itemService: ItemService){}
@@ -40,7 +41,12 @@ throw new Error('Method not implemented.');
       console.log(response)
       this.ngOnInit()
       
+      
     })
+    if (this.todoForm.valid) {
+      console.log(this.name);
+      // Proceed with item creation
+  }
   }
   // updateItem(){
   //   this.item= {id:this.id, name: this.name}
@@ -52,10 +58,16 @@ throw new Error('Method not implemented.');
   //   })
     
   // }
-  deleteItem(){
-    this.itemService.deleteItem(this.id).subscribe(response => {
-      console.log(response)
-      this.ngOnInit()
-    })
-  }
+  deleteItem(itemId: number) {
+    this.itemService.deleteItem(itemId).subscribe({
+        next: (response) => {
+            console.log(response);
+            // Remove the deleted item from the items array to update the UI
+            this.items = this.items.filter((item: { id: number; }) => item.id !== itemId);
+        },
+        error: (error) => {
+            console.error('Error deleting item with id', itemId, error);
+        }
+    });
+}
 }
