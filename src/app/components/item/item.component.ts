@@ -3,24 +3,27 @@ import { ItemService } from '../../services/item.service';
 import { response } from 'express';
 import { Item } from '../../models/item.model';
 
+
 @Component({
   selector: 'app-item',
   templateUrl: './item.component.html',
   styleUrl: './item.component.css'
 })
 export class ItemComponent {
+
 onSubmit: any;
-
-
-
   items:any;
   item: Item | undefined;
   id: number | undefined;
   name: string | undefined;
   todoForm: any;
-  
+anySelected: any;
 
-  constructor(private itemService: ItemService){}
+ constructor(private itemService: ItemService){}
+
+  checkIfAnySelected() {
+    this.anySelected = this.items.some((item: { selected: any; }) => item.selected);
+  }
 
   ngOnInit(){
     this.itemService.getItems().subscribe(response =>{
@@ -62,12 +65,14 @@ onSubmit: any;
     this.itemService.deleteItem(itemId).subscribe({
         next: (response) => {
             console.log(response);
-            // Remove the deleted item from the items array to update the UI
             this.items = this.items.filter((item: { id: number; }) => item.id !== itemId);
+            this.checkIfAnySelected(); 
         },
         error: (error) => {
             console.error('Error deleting item with id', itemId, error);
         }
     });
+    // this.items = this.items.filter((item: { id: number; }) => item.id !== itemId);
+   
 }
 }
